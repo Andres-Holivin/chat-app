@@ -104,11 +104,11 @@ jobs:
 
             # Stop and remove old container
             echo "🛑 Stopping old container..."
-            docker-compose down || true
+            docker compose down || true
 
             # Start new container
             echo "▶️ Starting new container..."
-            docker-compose up -d
+            docker compose up -d
 
             # Wait for container to be healthy
             echo "⏳ Waiting for application to start..."
@@ -120,7 +120,7 @@ jobs:
               
               # Run database migrations
               echo "🔄 Running database migrations..."
-              docker-compose exec -T web bundle exec rails db:migrate || true
+              docker compose exec -T web bundle exec rails db:migrate || true
               
               # Clean up old images
               echo "🧹 Cleaning up old Docker images..."
@@ -129,7 +129,7 @@ jobs:
               echo "✅ Deployment successful!"
             else
               echo "❌ Deployment failed - container not running"
-              docker-compose logs
+              docker compose logs
               exit 1
             fi
 
