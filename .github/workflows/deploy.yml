@@ -141,6 +141,10 @@ jobs:
               echo "🔄 Running database migrations..."
               docker compose exec -T web bundle exec rails db:migrate || true
               
+              # Load solid_cable schema
+              echo "🔄 Loading solid_cable schema..."
+              docker compose exec -T web bundle exec rails db:schema:load:cable || true
+              
               # Clean up old images
               echo "🧹 Cleaning up old Docker images..."
               docker image prune -af --filter "until=72h" || true
