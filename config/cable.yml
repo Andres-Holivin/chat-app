@@ -2,13 +2,19 @@
 # and seeing results in the browser, you must do so from the web console (running inside the dev process),
 # not a terminal started via bin/rails console! Add "console" to any action or any ERB template view
 # to make the web console appear.
-development:
-  adapter: async
-
-test:
-  adapter: test
-
-production:
+default: &default
   adapter: redis
   url: <%= ENV['REDIS_URL'] %>
+  
+
+development:
+  <<: *default
+  channel_prefix: chat_app_development
+
+test:
+  <<: *default
+  channel_prefix: chat_app_test
+
+production:
+  <<: *default
   channel_prefix: chat_app_production
