@@ -82,6 +82,25 @@ jobs:
             echo "📦 Pulling latest Docker image..."
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
+            # Create/update .env file from GitHub secrets
+            echo "📝 Creating .env file from environment variables..."
+            cat > .env << ENVEOF
+            # Rails Configuration
+            RAILS_ENV=${{ vars.RAILS_ENV }}
+            RAILS_LOG_TO_STDOUT=true
+            RAILS_SERVE_STATIC_FILES=true
+            
+            # Database Configuration
+            DATABASE_URL=${{ vars.DATABASE_URL }}
+            
+            # Secret Key Base
+            SECRET_KEY_BASE=${{ vars.SECRET_KEY_BASE }}
+
+            # Redis Configuration (if using Redis for Action Cable)
+            # REDIS_URL=${{ vars.REDIS_URL }}
+            ENVEOF
+            echo "✅ .env file created/updated from secrets"
+
             # Create/update docker-compose.yml to use the GitHub Container Registry image
             cat > docker-compose.yml << 'EOF'
             services:
