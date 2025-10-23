@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "target": "ES2017",
+        "module": "ES2020",
+        "jsx": "react-jsx", // For automatic JSX runtime (no need to import React in every file)
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "bundler",
+        "baseUrl": "./app/javascript",
+        "ignoreDeprecations": "6.0",
+        "paths": {
+            "@/*": [
+                "*"
+            ],
+            "@/components/*": [
+                "components/*"
+            ],
+            "@/lib/*": [
+                "lib/*"
+            ]
+        }
+    },
+    "include": [
+        "app/javascript/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

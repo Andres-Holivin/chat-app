@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: chat-app:latest
+    ports:
+      - "80:80"
+    environment:
+      # Rails environment
+      - RAILS_ENV=production
+      
+      # External PostgreSQL database (Neon)
+      # Set this in your .env file or pass via command line
+      - DATABASE_URL=${DATABASE_URL}
+      
+      # Rails secret key (required for production)
+      # Generate with: rails secret
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      
+      # Action Cable configuration for WebSocket
+      - CABLE_ADAPTER=async
+      - ACTION_CABLE_ALLOWED_REQUEST_ORIGINS=${ACTION_CABLE_ALLOWED_REQUEST_ORIGINS:-*}
+      
+      # Optional: Redis URL if using Redis for Action Cable
+      # - REDIS_URL=${REDIS_URL}
+      
+      # Server configuration
+      - RAILS_MAX_THREADS=${RAILS_MAX_THREADS:-5}
+      - WEB_CONCURRENCY=${WEB_CONCURRENCY:-2}
+      
+    volumes:
+      # Persist storage for uploaded files
+      - storage:/rails/storage
+      
+      # Persist logs
+      - logs:/rails/log
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+    
+    # Optional: Set resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+volumes:
+  storage:
+    driver: local
+  logs:
+    driver: local
