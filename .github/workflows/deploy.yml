@@ -55,7 +55,7 @@ jobs:
     name: Deploy to Server
     runs-on: ubuntu-latest
     needs: build-and-push
-
+    environment: prod
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -69,19 +69,19 @@ jobs:
           password: ${{ secrets.SERVER_SSH_PASSWORD }}
           script: |
             set -e
-            
+
             echo "🚀 Starting deployment..."
-            
+
             # Navigate to deployment directory
             cd ${{ secrets.DEPLOY_PATH }}
-            
+
             # Log in to GitHub Container Registry
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
-            
+
             # Pull latest image
             echo "📦 Pulling latest Docker image..."
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            
+
             # Create/update docker-compose.yml to use the GitHub Container Registry image
             cat > docker-compose.yml << 'EOF'
             services:
@@ -101,19 +101,19 @@ jobs:
                   retries: 3
                   start_period: 40s
             EOF
-            
+
             # Stop and remove old container
             echo "🛑 Stopping old container..."
             docker-compose down || true
-            
+
             # Start new container
             echo "▶️ Starting new container..."
             docker-compose up -d
-            
+
             # Wait for container to be healthy
             echo "⏳ Waiting for application to start..."
             sleep 15
-            
+
             # Check if container is running
             if docker ps | grep -q chat-app; then
               echo "✅ Container is running!"
@@ -137,7 +137,7 @@ jobs:
         run: |
           echo "🔍 Verifying deployment..."
           sleep 5
-          
+
           # Check if the application is accessible
           for i in {1..10}; do
             if curl -f -s -o /dev/null http://${{ secrets.SERVER_HOST }}:3000/up; then
@@ -147,7 +147,7 @@ jobs:
             echo "Attempt $i failed, retrying in 5 seconds..."
             sleep 5
           done
-          
+
           echo "⚠️ Health check endpoint not accessible from outside"
           echo "Container may still be running. Please verify manually."
 
