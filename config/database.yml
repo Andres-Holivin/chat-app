@@ -5,10 +5,31 @@ default: &default
   timeout: 5000
 
 development:
-  <<: *default
+  primary: &primary_development
+    <<: *default
+  cache:
+    <<: *default
+  queue:
+    <<: *default
+  cable:
+    <<: *default
 
 test:
-  <<: *default
+  primary: &primary_test
+    <<: *default
+  cache:
+    <<: *default
+  queue:
+    <<: *default
+  cable:
+    <<: *default
 
 production:
-  <<: *default
+  primary:
+    <<: *default
+  cache:
+    <<: *default
+  queue:
+    <<: *default
+  cable:
+    <<: *default

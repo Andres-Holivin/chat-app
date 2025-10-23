@@ -7,8 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
-# Ignore all environment files.
+# Ignore all environment files (except templates).
 /.env*
+!/.env*.erb
 
 # Ignore all default key files.
 /config/master.key
@@ -39,13 +40,28 @@
 # Ignore CI service files.
 /.github
 
-# Ignore Kamal files.
-/config/deploy*.yml
-/.kamal
-
 # Ignore development files
-/.devcontainer
+/.vscode
+/.idea
+*.swp
+*.swo
+*~
 
-# Ignore Docker-related files
-/.dockerignore
+# Ignore Docker files
 /Dockerfile*
+/docker-compose*
+/.dockerignore
+
+# Ignore test files
+/test/
+/spec/
+/coverage/
+
+# Ignore documentation
+/doc/
+/README.md
+*.md
+
+# Ignore development dependencies
+/bin/dev
+/Procfile.dev
