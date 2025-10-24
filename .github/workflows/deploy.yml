@@ -111,10 +111,16 @@ jobs:
                 env_file:
                   - .env
                 environment:
-                  - RAILS_ENV=production
+                  - RAILS_ENV=${{ vars.RAILS_ENV }}
+                  - DATABASE_URL=${{ vars.DATABASE_URL }}
+                  - REDIS_URL=${{ vars.REDIS_URL }}
+                  - RAILS_MASTER_KEY=${{ vars.RAILS_MASTER_KEY }}
+                  - SECRET_KEY_BASE=${{ vars.SECRET_KEY_BASE }}
+                  - RAILS_LOG_TO_STDOUT="true"
+                  - RAILS_SERVE_STATIC_FILES="true"
                 restart: unless-stopped
                 healthcheck:
-                  test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
+                  test: ["CMD", "curl", "-f", "http://${{ secrets.SERVER_HOST }}:3000/up"]
                   interval: 30s
                   timeout: 3s
                   retries: 3
