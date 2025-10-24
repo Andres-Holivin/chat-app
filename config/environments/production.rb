@@ -90,4 +90,9 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.action_cable.url = "wss://rails-chat.andresholivin.dev/cable"
+  config.action_cable.allowed_request_origins = [
+    'https://rails-chat.andresholivin.dev',
+    'https://andresholivin.dev/'
+  ]
 end
